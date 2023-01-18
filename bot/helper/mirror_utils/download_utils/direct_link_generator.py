@@ -757,10 +757,6 @@ def shareDrive(url, directLogin=True):
 
 
 def prun(playwright: Playwright, link: str) -> str:
-    """ filepress google drive link generator
-    By https://t.me/maverick9099
-    GitHub: https://github.com/majnurangeela"""
-
     browser = playwright.chromium.launch()
     context = browser.new_context()
 
@@ -771,12 +767,18 @@ def prun(playwright: Playwright, link: str) -> str:
         "xpath=//div[text()='Direct Download']/parent::button")
     expect(firstbtn).to_be_visible()
     firstbtn.click()
-    sleep(6)
+    sleep(10)
+    
+    chklink = page.url
+
+    if not 'filepress' in chklink:
+        raise DirectDownloadLinkException("Unable To Get Google Drive Link!")
 
     secondBtn = page.get_by_role("button", name="Download Now")
     expect(secondBtn).to_be_visible()
     with page.expect_navigation():
         secondBtn.click()
+        sleep(10)
 
     Flink = page.url
 
