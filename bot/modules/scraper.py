@@ -87,23 +87,24 @@ def scrapper(update, context):
 
     elif "teluguflix" in link:
         sent = sendMessage('Running Scrape ...', context.bot, update.message)
-        gd_txt = ""
-        r = rget(link)
-        soup = BeautifulSoup (r.text, "html.parser")
-        links = soup.select('a[href*="gdtot"]')
-        gd_txt = f"Total Links Found : {len(links)}\n\n"
-        editMessage(gd_txt, sent)
-        for no, link in enumerate(links, start=1):
-            gdlk = link['href']
-            t = rget(gdlk)
-            soupt = BeautifulSoup(t.text, "html.parser")
-            title = soupt.select('meta[property^="og:description"]')
-            gd_txt += f"{no}. <code>{(title[0]['content']).replace('Download ' , '')}</code>\n{gdlk}\n\n"
-            editMessage(gd_txt, sent)
-            asleep(1.5)
-            if len(gd_txt) > 4000:
-                sent = sendMessage("<i>Running More Scrape ...</i>", context.bot, update.message)
-                gd_txt = ""
+        prsd = ""
+        links = []
+        res = rget(link)
+        soup = BeautifulSoup(res.text, 'html.parser')
+        x = soup.select('a[href^="https://filepress"]')
+        for a in x:
+            links.append(a['href'])
+        for o in links:
+            res = rget(o)
+            soup = BeautifulSoup(res.content, "html.parser")
+            title = soup.title
+            prsd += f'{title}\n{o}\n\n'
+            if len(prsd) > 4000:
+                sendMessage(prsd, context.bot, update.message)
+                prsd = ""
+        if prsd != "":
+            sendMessage(prsd, context.bot, update.message)
+            prsd = ""
     elif "cinevood" in link:
         prsd = ""
         links = []
