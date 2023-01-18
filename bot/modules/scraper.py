@@ -86,7 +86,6 @@ def scrapper(update, context):
             sendMessage(gd_txt, context.bot, update.message)
 
     elif "teluguflix" in link:
-        sent = sendMessage('Running Scrape ...', context.bot, update.message)
         prsd = ""
         links = []
         res = rget(link)
@@ -101,7 +100,6 @@ def scrapper(update, context):
             prsd += f'{title}\n{o}\n\n'
             if len(prsd) > 4000:
                 sendMessage(prsd, context.bot, update.message)
-                prsd = ""
         if prsd != "":
             sendMessage(prsd, context.bot, update.message)
             prsd = ""
